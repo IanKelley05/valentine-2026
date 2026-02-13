@@ -47,24 +47,25 @@
 <body class="bg-cream text-gray-800 font-sans antialiased">
 
     <header class="min-h-screen flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-soft-pink to-cream relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-            <div class="absolute top-10 left-10 text-6xl text-love-red animate-float">♥</div>
-            <div class="absolute bottom-20 right-20 text-4xl text-deep-rose animate-float" style="animation-delay: 1.5s;">♥</div>
-        </div>
+        
+        <div id="heart-container" class="absolute inset-0 overflow-hidden pointer-events-none select-none">
+            </div>
 
-        <h1 class="font-serif text-5xl md:text-7xl font-bold text-deep-rose mb-6 animate-float">
-            Mian Valentine’s Day 2026
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mb-10 font-light">
-            Counting down the days until we take on New York City. <br>
-            But first, a virtual date night adventure.
-        </p>
-        <a href="#dinner" class="bg-love-red text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider btn-hover shadow-lg">
-            Start the Date
-        </a>
+        <div class="relative z-10">
+            <h1 class="font-serif text-5xl md:text-7xl font-bold text-deep-rose mb-6 animate-float">
+                Mian Valentine’s Day 2026
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mb-10 font-light mx-auto">
+                Counting down the days until we take on New York City. <br>
+                But first, a virtual date night adventure.
+            </p>
+            <a href="#dinner" class="bg-love-red text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider btn-hover shadow-lg inline-block">
+                Start the Date
+            </a>
+        </div>
     </header>
 
-    <section id="dinner" class="py-20 px-4 bg-white">
+    <section id="dinner" class="py-20 px-4 bg-white relative z-20">
         <div class="max-w-4xl mx-auto text-center">
             <h2 class="font-serif text-4xl text-deep-rose mb-8">Part I: The DoorDash Roulette</h2>
             
@@ -82,7 +83,7 @@
         </div>
     </section>
 
-    <section id="map-challenge" class="py-20 px-4 bg-cream border-t border-pink-100">
+    <section id="map-challenge" class="py-20 px-4 bg-cream border-t border-pink-100 relative z-20">
         <div class="max-w-5xl mx-auto">
             <div class="grid md:grid-cols-2 gap-12 items-start mb-12">
                 
@@ -125,14 +126,14 @@
 
             <div class="w-full bg-white p-2 rounded-2xl shadow-xl border border-pink-200">
                 <iframe 
-                    src="https://www.google.com/maps/d/embed?mid=1_2aAWbw4qDsupPV_8ygW6pl2NgfEO2U&ehbc=2E312F"
+                    src="https://www.google.com/maps/d/embed?mid=1_2aAwbw4qDsupPV_8ygW6p12NgfEO2U&ehbc=2E312F" 
                     class="w-full h-96 md:h-[500px] rounded-xl"
                     style="border:0;" 
                     allowfullscreen="" 
                     loading="lazy">
                 </iframe>
                 <div class="text-center mt-4 mb-2">
-                    <a href="https://www.google.com/maps/d/viewer?mid=1_2aAwbw4qDsupPV_8ygW6p12NgfEO2U" target="_blank" class="text-sm text-gray-500 hover:text-love-red underline">
+                    <a href="https://www.google.com/maps/d/viewer?mid=1_2aAwbw4qDsupPV_8ygW6p12NgfEO2U&ehbc=2E312F" target="_blank" class="text-sm text-gray-500 hover:text-love-red underline">
                         Open map in full screen ↗
                     </a>
                 </div>
@@ -140,7 +141,7 @@
             </div>
     </section>
 
-    <section id="coloring" class="py-20 px-4 bg-gradient-to-t from-soft-pink to-white">
+    <section id="coloring" class="py-20 px-4 bg-gradient-to-t from-soft-pink to-white relative z-20">
         <div class="max-w-3xl mx-auto text-center">
             <h2 class="font-serif text-4xl text-deep-rose mb-6">Part III: The Masterpiece</h2>
             <p class="text-lg text-gray-600 mb-10">
@@ -157,12 +158,13 @@
         </div>
     </section>
 
-    <footer class="bg-deep-rose text-pink-100 py-10 text-center">
+    <footer class="bg-deep-rose text-pink-100 py-10 text-center relative z-20">
         <p class="font-serif italic text-xl">Can't wait to see you in NYC.</p>
         <p class="text-sm mt-4 opacity-75">Love, Ian</p>
     </footer>
 
     <script>
+        /* --- TIMER SCRIPT --- */
         let timeLeft = 15 * 60; 
         let timerId = null;
         const display = document.getElementById('timer-display');
@@ -213,6 +215,74 @@
             startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             startBtn.innerText = "Start Challenge";
         }
+
+        /* --- INTERACTIVE HEART BACKGROUND SCRIPT --- */
+        const heartContainer = document.getElementById('heart-container');
+        const heartCount = 30; // Number of hearts
+        const heartElements = [];
+        
+        // Initialize Hearts
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '♥';
+            heart.className = 'absolute text-love-red opacity-30 pointer-events-none';
+            
+            // Random styling
+            const size = Math.random() * 20 + 10; // 10px to 30px
+            heart.style.fontSize = `${size}px`;
+            
+            // Initial Position (Random on screen)
+            let posX = Math.random() * window.innerWidth;
+            let posY = Math.random() * window.innerHeight;
+            
+            heart.style.left = `${posX}px`;
+            heart.style.top = `${posY}px`;
+            
+            // Each heart gets a unique "offset" from the mouse so they don't clump
+            const offsetX = (Math.random() - 0.5) * 500; // Spread wide
+            const offsetY = (Math.random() - 0.5) * 500; 
+            
+            const speed = 0.02 + Math.random() * 0.03; // Smooth slow lag
+
+            heartElements.push({ el: heart, x: posX, y: posY, offsetX, offsetY, speed });
+            heartContainer.appendChild(heart);
+        }
+
+        // Track Mouse
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Animation Loop
+        function animateHearts() {
+            heartElements.forEach(h => {
+                // Calculate target position (Mouse + unique offset)
+                // We add window.scrollY so they stay relevant if scrolled, 
+                // but since they are in the header (absolute), we mostly care about header space.
+                // For a fixed background effect, let's keep it relative to viewport.
+                
+                const targetX = mouseX + h.offsetX;
+                const targetY = mouseY + h.offsetY + window.scrollY * 0.5; // Slight parallax on scroll
+                
+                // Linear Interpolation (Lerp) for smooth following
+                h.x += (targetX - h.x) * h.speed;
+                h.y += (targetY - h.y) * h.speed;
+
+                h.el.style.transform = `translate(${h.x}px, ${h.y}px)`;
+                // Reset left/top to 0 so translate works cleanly from 0,0
+                h.el.style.left = '0';
+                h.el.style.top = '0';
+            });
+            requestAnimationFrame(animateHearts);
+        }
+        
+        // Start Animation
+        animateHearts();
+
     </script>
 </body>
 </html>
