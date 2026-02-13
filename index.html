@@ -61,7 +61,7 @@
 
         <div id="interactive-hearts" class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0"></div>
 
-        <div class="relative z-10 bg-white/30 backdrop-blur-sm p-8 rounded-3xl border border-white/50 shadow-sm">
+        <div class="relative z-10 bg-white/40 backdrop-blur-md p-10 rounded-3xl border-4 border-double border-white/80 shadow-xl">
             <h1 class="font-serif text-5xl md:text-7xl font-bold text-deep-rose mb-6 animate-float">
                 Mian Valentine’s Day 2026
             </h1>
@@ -283,10 +283,12 @@
                 // Each heart wants to go to a slightly different spot relative to mouse
                 offsetX: (Math.random() - 0.5) * 300, 
                 offsetY: (Math.random() - 0.5) * 300,
-                // "Spring" strength (how fast it accelerates to target)
-                spring: Math.random() * 0.02 + 0.01, 
-                // "Friction" (how much it slides before stopping)
-                friction: Math.random() * 0.05 + 0.90 
+                
+                // --- UPDATED PHYSICS FOR SLOWER "CATCH UP" FEEL ---
+                // Lower spring = slower acceleration (they lag behind)
+                spring: Math.random() * 0.003 + 0.002, 
+                // Higher friction = smoother glide (they don't stop instantly)
+                friction: Math.random() * 0.05 + 0.92 
             });
         }
 
@@ -302,7 +304,6 @@
         function animatePhysics() {
             movingHearts.forEach(h => {
                 // 1. Calculate where this specific heart WANTS to go
-                // We add a slow sine wave to the offset to make them "breathe" or wander slightly
                 const time = Date.now() * 0.001;
                 const wanderX = Math.sin(time + h.offsetX) * 20;
                 const wanderY = Math.cos(time + h.offsetY) * 20;
