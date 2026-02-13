@@ -152,18 +152,42 @@
     </section>
 
     <section id="coloring" class="py-20 px-4 bg-gradient-to-t from-soft-pink to-white relative z-20">
-        <div class="max-w-3xl mx-auto text-center">
+        <div class="max-w-6xl mx-auto text-center">
             <h2 class="font-serif text-4xl text-deep-rose mb-6">Part III: The Masterpiece</h2>
-            <p class="text-lg text-gray-600 mb-10">
-                While we eat, we create. I've turned one of our favorite photos into a line drawing.
-                Print it out (or open it on your iPad) and let's color it together while we chat.
+            <p class="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+                While we eat, we create. I've turned our photos into coloring pages.
+                Pick your favorite, download it (or open on iPad), and let's color together.
             </p>
             
-            <div class="relative group inline-block">
-                <div class="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                <a href="#" class="relative block bg-white border border-gray-200 text-gray-800 px-10 py-5 rounded-lg font-bold text-lg btn-hover">
-                    🎨 Download Our Coloring Page
-                </a>
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
+                    <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
+                        <img src="page-1.png" alt="Coloring Page 1" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <a href="page-1.png" download="Mian-Coloring-Landscape-1.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
+                        Download #1
+                    </a>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center transform md:-translate-y-4">
+                    <div class="h-80 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
+                        <img src="page-2.png" alt="Coloring Page 2" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <a href="page-2.png" download="Mian-Coloring-Portrait.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
+                        Download #2
+                    </a>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
+                    <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
+                        <img src="page-3.png" alt="Coloring Page 3" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <a href="page-3.png" download="Mian-Coloring-Landscape-2.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
+                        Download #3
+                    </a>
+                </div>
+
             </div>
         </div>
     </section>
@@ -280,14 +304,9 @@
                 y: Math.random() * window.innerHeight,
                 vx: 0, // Velocity X
                 vy: 0, // Velocity Y
-                // Each heart wants to go to a slightly different spot relative to mouse
                 offsetX: (Math.random() - 0.5) * 300, 
                 offsetY: (Math.random() - 0.5) * 300,
-                
-                // --- UPDATED PHYSICS FOR SLOWER "CATCH UP" FEEL ---
-                // Lower spring = slower acceleration (they lag behind)
                 spring: Math.random() * 0.003 + 0.002, 
-                // Higher friction = smoother glide (they don't stop instantly)
                 friction: Math.random() * 0.05 + 0.92 
             });
         }
@@ -312,7 +331,6 @@
                 const destY = targetY + h.offsetY + wanderY;
 
                 // 2. Spring Physics
-                // Acceleration = Distance to target * Spring strength
                 const ax = (destX - h.x) * h.spring;
                 const ay = (destY - h.y) * h.spring;
 
@@ -320,7 +338,7 @@
                 h.vx += ax;
                 h.vy += ay;
 
-                // 4. Apply Friction (Drag)
+                // 4. Apply Friction
                 h.vx *= h.friction;
                 h.vy *= h.friction;
 
