@@ -125,14 +125,14 @@
 
             <div class="w-full bg-white p-2 rounded-2xl shadow-xl border border-pink-200">
                 <iframe 
-                    src="https://www.google.com/maps/d/embed?mid=1_2aAWbw4qDsupPV_8ygW6p12NgfEO2U&ehbc=2E312F" 
+                    src="https://www.google.com/maps/d/embed?mid=1_2aAWbw4qDsupPV_8ygW6pl2NgfEO2U&ehbc=2E312F"
                     class="w-full h-96 md:h-[500px] rounded-xl"
                     style="border:0;" 
                     allowfullscreen="" 
                     loading="lazy">
                 </iframe>
                 <div class="text-center mt-4 mb-2">
-                    <a href="https://www.google.com/maps/d/u/0/edit?mid=1_2aAWbw4qDsupPV_8ygW6p12NgfEO2U&usp=sharing" target="_blank" class="text-sm text-gray-500 hover:text-love-red underline">
+                    <a href="https://www.google.com/maps/d/viewer?mid=1_2aAwbw4qDsupPV_8ygW6p12NgfEO2U" target="_blank" class="text-sm text-gray-500 hover:text-love-red underline">
                         Open map in full screen ↗
                     </a>
                 </div>
@@ -163,7 +163,7 @@
     </footer>
 
     <script>
-        let timeLeft = 15 * 60; // 15 minutes in seconds
+        let timeLeft = 15 * 60; 
         let timerId = null;
         const display = document.getElementById('timer-display');
         const alertMsg = document.getElementById('alert-msg');
@@ -176,7 +176,7 @@
         }
 
         function startTimer() {
-            if (timerId) return; // Prevent multiple clicks
+            if (timerId) return; 
 
             startBtn.disabled = true;
             startBtn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -186,7 +186,6 @@
                 timeLeft--;
                 display.innerText = formatTime(timeLeft);
 
-                // Warning color when under 1 minute
                 if (timeLeft < 60) {
                     display.classList.add('text-love-red');
                     display.classList.remove('text-gray-800');
