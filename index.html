@@ -25,14 +25,23 @@
         }
     </script>
     <style>
-        /* Custom Animations */
-        @keyframes float {
+        /* Floating animation for static hearts */
+        @keyframes float-up-down {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-float-static {
+            animation: float-up-down 6s ease-in-out infinite;
+        }
+        
+        /* Main title float */
+        @keyframes float-title {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
         .animate-float {
-            animation: float 3s ease-in-out infinite;
+            animation: float-title 3s ease-in-out infinite;
         }
         
         .btn-hover {
@@ -48,10 +57,11 @@
 
     <header class="min-h-screen flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-soft-pink to-cream relative overflow-hidden">
         
-        <div id="heart-container" class="absolute inset-0 overflow-hidden pointer-events-none select-none">
-            </div>
+        <div id="static-hearts" class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0"></div>
 
-        <div class="relative z-10">
+        <div id="interactive-hearts" class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0"></div>
+
+        <div class="relative z-10 bg-white/30 backdrop-blur-sm p-8 rounded-3xl border border-white/50 shadow-sm">
             <h1 class="font-serif text-5xl md:text-7xl font-bold text-deep-rose mb-6 animate-float">
                 Mian Valentine’s Day 2026
             </h1>
@@ -126,19 +136,19 @@
 
             <div class="w-full bg-white p-2 rounded-2xl shadow-xl border border-pink-200">
                 <iframe 
-                    src="https://www.google.com/maps/d/embed?mid=1_2aAwbw4qDsupPV_8ygW6p12NgfEO2U&ehbc=2E312F" 
+                    src="https://www.google.com/maps/d/embed?mid=1_2aAWbw4qDsupPV_8ygW6pl2NgfEO2U&ehbc=2E312F" 
                     class="w-full h-96 md:h-[500px] rounded-xl"
                     style="border:0;" 
                     allowfullscreen="" 
                     loading="lazy">
                 </iframe>
                 <div class="text-center mt-4 mb-2">
-                    <a href="https://www.google.com/maps/d/viewer?mid=1_2aAwbw4qDsupPV_8ygW6p12NgfEO2U&ehbc=2E312F" target="_blank" class="text-sm text-gray-500 hover:text-love-red underline">
+                    <a href="https://www.google.com/maps/d/embed?mid=1_2aAWbw4qDsupPV_8ygW6pl2NgfEO2U&ehbc=2E312F" target="_blank" class="text-sm text-gray-500 hover:text-love-red underline">
                         Open map in full screen ↗
                     </a>
                 </div>
             </div>
-            </div>
+        </div>
     </section>
 
     <section id="coloring" class="py-20 px-4 bg-gradient-to-t from-soft-pink to-white relative z-20">
@@ -216,72 +226,117 @@
             startBtn.innerText = "Start Challenge";
         }
 
-        /* --- INTERACTIVE HEART BACKGROUND SCRIPT --- */
-        const heartContainer = document.getElementById('heart-container');
-        const heartCount = 30; // Number of hearts
-        const heartElements = [];
+        /* --- HEART GENERATOR HELPERS --- */
+        const colors = ['text-love-red', 'text-pink-400', 'text-deep-rose', 'text-pink-300'];
         
-        // Initialize Hearts
-        for (let i = 0; i < heartCount; i++) {
+        function createHeart(isStatic) {
             const heart = document.createElement('div');
             heart.innerHTML = '♥';
-            heart.className = 'absolute text-love-red opacity-30 pointer-events-none';
             
-            // Random styling
-            const size = Math.random() * 20 + 10; // 10px to 30px
+            // Random Color
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            heart.classList.add(randomColor, 'absolute', 'pointer-events-none');
+            
+            // Random Size
+            const size = Math.random() * (isStatic ? 15 : 25) + 10;
             heart.style.fontSize = `${size}px`;
-            
-            // Initial Position (Random on screen)
-            let posX = Math.random() * window.innerWidth;
-            let posY = Math.random() * window.innerHeight;
-            
-            heart.style.left = `${posX}px`;
-            heart.style.top = `${posY}px`;
-            
-            // Each heart gets a unique "offset" from the mouse so they don't clump
-            const offsetX = (Math.random() - 0.5) * 500; // Spread wide
-            const offsetY = (Math.random() - 0.5) * 500; 
-            
-            const speed = 0.02 + Math.random() * 0.03; // Smooth slow lag
 
-            heartElements.push({ el: heart, x: posX, y: posY, offsetX, offsetY, speed });
-            heartContainer.appendChild(heart);
+            // Random Opacity
+            heart.style.opacity = isStatic ? (Math.random() * 0.3 + 0.1) : (Math.random() * 0.5 + 0.2);
+
+            return heart;
         }
 
-        // Track Mouse
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
+        /* --- 1. STATIC BACKGROUND HEARTS --- */
+        const staticContainer = document.getElementById('static-hearts');
+        for (let i = 0; i < 50; i++) {
+            const heart = createHeart(true);
+            
+            // Position randomly
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.top = `${Math.random() * 100}%`;
+            
+            // Add floating animation with random delay so they don't sync up
+            heart.classList.add('animate-float-static');
+            heart.style.animationDelay = `${Math.random() * 5}s`;
+            heart.style.animationDuration = `${Math.random() * 3 + 4}s`; // 4s to 7s duration
+
+            staticContainer.appendChild(heart);
+        }
+
+        /* --- 2. INTERACTIVE FLUID HEARTS --- */
+        const interactiveContainer = document.getElementById('interactive-hearts');
+        const movingHearts = [];
+        const numMoving = 20;
+
+        for (let i = 0; i < numMoving; i++) {
+            const heartEl = createHeart(false);
+            interactiveContainer.appendChild(heartEl);
+
+            // Give each heart distinct physics properties
+            movingHearts.push({
+                el: heartEl,
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: 0, // Velocity X
+                vy: 0, // Velocity Y
+                // Each heart wants to go to a slightly different spot relative to mouse
+                offsetX: (Math.random() - 0.5) * 300, 
+                offsetY: (Math.random() - 0.5) * 300,
+                // "Spring" strength (how fast it accelerates to target)
+                spring: Math.random() * 0.02 + 0.01, 
+                // "Friction" (how much it slides before stopping)
+                friction: Math.random() * 0.05 + 0.90 
+            });
+        }
+
+        // Mouse Tracker
+        let targetX = window.innerWidth / 2;
+        let targetY = window.innerHeight / 2;
 
         document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            targetX = e.clientX;
+            targetY = e.clientY + window.scrollY; // Account for scroll
         });
 
-        // Animation Loop
-        function animateHearts() {
-            heartElements.forEach(h => {
-                // Calculate target position (Mouse + unique offset)
-                // We add window.scrollY so they stay relevant if scrolled, 
-                // but since they are in the header (absolute), we mostly care about header space.
-                // For a fixed background effect, let's keep it relative to viewport.
-                
-                const targetX = mouseX + h.offsetX;
-                const targetY = mouseY + h.offsetY + window.scrollY * 0.5; // Slight parallax on scroll
-                
-                // Linear Interpolation (Lerp) for smooth following
-                h.x += (targetX - h.x) * h.speed;
-                h.y += (targetY - h.y) * h.speed;
+        function animatePhysics() {
+            movingHearts.forEach(h => {
+                // 1. Calculate where this specific heart WANTS to go
+                // We add a slow sine wave to the offset to make them "breathe" or wander slightly
+                const time = Date.now() * 0.001;
+                const wanderX = Math.sin(time + h.offsetX) * 20;
+                const wanderY = Math.cos(time + h.offsetY) * 20;
 
+                const destX = targetX + h.offsetX + wanderX;
+                const destY = targetY + h.offsetY + wanderY;
+
+                // 2. Spring Physics
+                // Acceleration = Distance to target * Spring strength
+                const ax = (destX - h.x) * h.spring;
+                const ay = (destY - h.y) * h.spring;
+
+                // 3. Update Velocity
+                h.vx += ax;
+                h.vy += ay;
+
+                // 4. Apply Friction (Drag)
+                h.vx *= h.friction;
+                h.vy *= h.friction;
+
+                // 5. Update Position
+                h.x += h.vx;
+                h.y += h.vy;
+
+                // 6. Apply to DOM
                 h.el.style.transform = `translate(${h.x}px, ${h.y}px)`;
-                // Reset left/top to 0 so translate works cleanly from 0,0
                 h.el.style.left = '0';
                 h.el.style.top = '0';
             });
-            requestAnimationFrame(animateHearts);
+            
+            requestAnimationFrame(animatePhysics);
         }
-        
-        // Start Animation
-        animateHearts();
+
+        animatePhysics();
 
     </script>
 </body>
