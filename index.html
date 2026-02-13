@@ -25,7 +25,7 @@
         }
     </script>
     <style>
-        /* Floating animation for static hearts */
+        /* Animations */
         @keyframes float-up-down {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
@@ -34,7 +34,6 @@
             animation: float-up-down 6s ease-in-out infinite;
         }
         
-        /* Main title float */
         @keyframes float-title {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -51,14 +50,33 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
+
+        /* Wheel Styles */
+        #wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        #arrow {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #D32F2F;
+            z-index: 10;
+            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.3));
+        }
     </style>
 </head>
 <body class="bg-cream text-gray-800 font-sans antialiased">
 
     <header class="min-h-screen flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-soft-pink to-cream relative overflow-hidden">
-        
         <div id="static-hearts" class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0"></div>
-
         <div id="interactive-hearts" class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0"></div>
 
         <div class="relative z-10 bg-white/40 backdrop-blur-md p-10 rounded-3xl border-4 border-double border-white/80 shadow-xl">
@@ -76,19 +94,42 @@
     </header>
 
     <section id="dinner" class="py-20 px-4 bg-white relative z-20">
-        <div class="max-w-4xl mx-auto text-center">
+        <div class="max-w-6xl mx-auto text-center">
             <h2 class="font-serif text-4xl text-deep-rose mb-8">Part I: The DoorDash Roulette</h2>
             
-            <div class="bg-soft-pink rounded-2xl p-8 md:p-12 shadow-xl border border-pink-100 transform hover:scale-[1.01] transition-transform duration-300">
-                <div class="text-4xl mb-6">🍔 🍣 🍕</div>
-                <p class="text-lg md:text-xl text-gray-700 mb-8 leading-relaxed">
-                    Tonight, distance doesn't matter. We are ordering for each other! <br>
-                    Pick something savory, something sweet, and something surprising. <br>
-                    <span class="font-bold text-love-red">Budget: $35 limit per person.</span>
-                </p>
-                <a href="https://www.doordash.com" target="_blank" class="inline-block bg-deep-rose text-white px-8 py-4 rounded-lg font-bold btn-hover shadow-md">
-                    Open DoorDash
-                </a>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                
+                <div class="bg-soft-pink rounded-2xl p-8 md:p-12 shadow-xl border border-pink-100 text-left">
+                    <div class="text-4xl mb-6 text-center">🍔 🍣 🍕</div>
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        Tonight, distance doesn't matter. We are ordering for each other! <br>
+                        Pick something savory, something sweet, and something surprising.
+                    </p>
+                    <p class="text-lg font-bold text-love-red mb-8 text-center">
+                        Budget: NONE LETS FEAST TONIGHT WE DESERVE IT!!
+                    </p>
+                    <div class="text-center">
+                        <a href="https://www.doordash.com" target="_blank" class="inline-block bg-deep-rose text-white px-8 py-4 rounded-lg font-bold btn-hover shadow-md">
+                            Open DoorDash
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-cream rounded-2xl p-8 border border-gray-100 shadow-lg flex flex-col items-center">
+                    <h3 class="font-serif text-2xl text-deep-rose mb-4">Can't decide? Spin for it!</h3>
+                    <p class="text-sm text-gray-500 mb-6 italic">Just a suggestion if you're stuck...</p>
+                    
+                    <div id="wheel-container">
+                        <div id="arrow"></div>
+                        <canvas id="wheel" width="300" height="300"></canvas>
+                    </div>
+                    
+                    <button onclick="spinWheel()" id="spin-btn" class="mt-6 bg-love-red text-white px-6 py-2 rounded-full font-bold btn-hover shadow-md">
+                        Spin the Wheel
+                    </button>
+                    <div id="wheel-result" class="mt-4 font-bold text-xl text-deep-rose min-h-[30px]"></div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -105,11 +146,12 @@
                     </p>
                     
                     <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-love-red mb-8">
-                        <h3 class="font-bold text-xl mb-4 text-gray-800">The Rules:</h3>
+                        <h3 class="font-bold text-xl mb-4 text-gray-800">The 5-Pin Rules:</h3>
                         <ul class="space-y-3 text-gray-600">
-                            <li class="flex items-center"><span class="text-love-red mr-2">✓</span> Exactly 3 Pins each on the map.</li>
-                            <li class="flex items-center"><span class="text-love-red mr-2">✓</span> Must include 1 Thrift Store.</li>
-                            <li class="flex items-center"><span class="text-love-red mr-2">✓</span> Must include 1 "Wildcard" (Weird/Cool/Random).</li>
+                            <li class="flex items-center"><span class="text-love-red mr-2">✓</span> Drop exactly <strong>5 Pins</strong> each.</li>
+                            <li class="flex items-center"><span class="text-love-red mr-2">✓</span> 1 Pin for <strong>Breakfast</strong>, 1 for <strong>Lunch</strong>, 1 for <strong>Dinner</strong>.</li>
+                            <li class="flex items-center"><span class="text-love-red mr-2">✓</span> 1 Activity that <strong>the other person will LOVE</strong>.</li>
+                            <li class="flex items-center"><span class="text-love-red mr-2">✓</span> 1 <strong>"Wildcard"</strong> Activity (Weird/Cool/Random).</li>
                             <li class="flex items-center"><span class="text-love-red mr-2">✓</span> No repeats allowed!</li>
                         </ul>
                     </div>
@@ -160,7 +202,6 @@
             </p>
             
             <div class="grid md:grid-cols-3 gap-8">
-                
                 <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
                     <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
                         <img src="page-1.png" alt="Coloring Page 1" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
@@ -169,7 +210,6 @@
                         Download #1
                     </a>
                 </div>
-
                 <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center transform md:-translate-y-4">
                     <div class="h-80 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
                         <img src="page-2.png" alt="Coloring Page 2" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
@@ -178,7 +218,6 @@
                         Download #2
                     </a>
                 </div>
-
                 <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
                     <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
                         <img src="page-3.png" alt="Coloring Page 3" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
@@ -187,7 +226,6 @@
                         Download #3
                     </a>
                 </div>
-
             </div>
         </div>
     </section>
@@ -213,20 +251,16 @@
 
         function startTimer() {
             if (timerId) return; 
-
             startBtn.disabled = true;
             startBtn.classList.add('opacity-50', 'cursor-not-allowed');
             startBtn.innerText = "Challenge in Progress...";
-
             timerId = setInterval(() => {
                 timeLeft--;
                 display.innerText = formatTime(timeLeft);
-
                 if (timeLeft < 60) {
                     display.classList.add('text-love-red');
                     display.classList.remove('text-gray-800');
                 }
-
                 if (timeLeft <= 0) {
                     clearInterval(timerId);
                     timerId = null;
@@ -244,66 +278,137 @@
             display.classList.remove('text-love-red');
             display.classList.add('text-gray-800');
             alertMsg.classList.add('hidden');
-            
             startBtn.disabled = false;
             startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             startBtn.innerText = "Start Challenge";
         }
 
-        /* --- HEART GENERATOR HELPERS --- */
-        const colors = ['text-love-red', 'text-pink-400', 'text-deep-rose', 'text-pink-300'];
+        /* --- SPIN THE WHEEL SCRIPT --- */
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spin-btn');
+        const resultText = document.getElementById('wheel-result');
+
+        const cuisines = ["Sushi", "Pizza", "Thai", "Burgers", "Tacos", "Italian", "Chinese", "Indian"];
+        const colorsWheel = ["#D32F2F", "#F48FB1", "#880E4F", "#FFCDD2", "#D32F2F", "#F48FB1", "#880E4F", "#FFCDD2"];
+        
+        let startAngle = 0;
+        let arc = Math.PI / (cuisines.length / 2);
+        let spinTimeout = null;
+        let spinArcStart = 10;
+        let spinTime = 0;
+        let spinTimeTotal = 0;
+        let currentRotation = 0;
+
+        function drawRouletteWheel() {
+            ctx.clearRect(0,0,300,300);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+            
+            ctx.save();
+            ctx.translate(150, 150); // Move to center
+            
+            for(let i = 0; i < cuisines.length; i++) {
+                const angle = startAngle + i * arc;
+                ctx.fillStyle = colorsWheel[i];
+                
+                ctx.beginPath();
+                ctx.arc(0, 0, 140, angle, angle + arc, false); // 140 radius
+                ctx.arc(0, 0, 0, angle + arc, angle, true);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.save();
+                ctx.fillStyle = "white";
+                ctx.translate(Math.cos(angle + arc / 2) * 110, Math.sin(angle + arc / 2) * 110);
+                ctx.rotate(angle + arc / 2 + Math.PI / 2);
+                ctx.font = 'bold 14px Lato';
+                ctx.fillText(cuisines[i], -ctx.measureText(cuisines[i]).width / 2, 0);
+                ctx.restore();
+            }
+            ctx.restore();
+        }
+
+        function spinWheel() {
+            spinBtn.disabled = true;
+            resultText.innerText = "";
+            spinTime = 0;
+            spinTimeTotal = (Math.random() * 1000) + 4000; // Spin between 4 and 5 seconds
+            rotateWheel();
+        }
+
+        function rotateWheel() {
+            spinTime += 30;
+            if(spinTime >= spinTimeTotal) {
+                stopRotateWheel();
+                return;
+            }
+            
+            // Ease out logic
+            const spinAngle = spinArcStart - easeOut(spinTime, 0, spinArcStart, spinTimeTotal);
+            startAngle += (spinAngle * Math.PI / 180);
+            drawRouletteWheel();
+            spinTimeout = setTimeout(rotateWheel, 30);
+        }
+
+        function stopRotateWheel() {
+            spinBtn.disabled = false;
+            const degrees = startAngle * 180 / Math.PI + 90;
+            const arcd = arc * 180 / Math.PI;
+            const index = Math.floor((360 - degrees % 360) / arcd);
+            ctx.save();
+            
+            // Show result
+            resultText.innerText = "Let's eat: " + cuisines[index] + "!";
+            drawRouletteWheel();
+        }
+
+        function easeOut(t, b, c, d) {
+            const ts = (t/=d)*t;
+            const tc = ts*t;
+            return b+c*(tc + -3*ts + 3*t);
+        }
+
+        // Initialize Wheel
+        drawRouletteWheel();
+
+        /* --- HEART BACKGROUND SCRIPT --- */
+        const heartColors = ['text-love-red', 'text-pink-400', 'text-deep-rose', 'text-pink-300'];
         
         function createHeart(isStatic) {
             const heart = document.createElement('div');
             heart.innerHTML = '♥';
-            
-            // Random Color
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const randomColor = heartColors[Math.floor(Math.random() * heartColors.length)];
             heart.classList.add(randomColor, 'absolute', 'pointer-events-none');
-            
-            // Random Size
             const size = Math.random() * (isStatic ? 15 : 25) + 10;
             heart.style.fontSize = `${size}px`;
-
-            // Random Opacity
             heart.style.opacity = isStatic ? (Math.random() * 0.3 + 0.1) : (Math.random() * 0.5 + 0.2);
-
             return heart;
         }
 
-        /* --- 1. STATIC BACKGROUND HEARTS --- */
+        // Static Hearts
         const staticContainer = document.getElementById('static-hearts');
         for (let i = 0; i < 50; i++) {
             const heart = createHeart(true);
-            
-            // Position randomly
             heart.style.left = `${Math.random() * 100}%`;
             heart.style.top = `${Math.random() * 100}%`;
-            
-            // Add floating animation with random delay so they don't sync up
             heart.classList.add('animate-float-static');
             heart.style.animationDelay = `${Math.random() * 5}s`;
-            heart.style.animationDuration = `${Math.random() * 3 + 4}s`; // 4s to 7s duration
-
+            heart.style.animationDuration = `${Math.random() * 3 + 4}s`; 
             staticContainer.appendChild(heart);
         }
 
-        /* --- 2. INTERACTIVE FLUID HEARTS --- */
+        // Interactive Hearts
         const interactiveContainer = document.getElementById('interactive-hearts');
         const movingHearts = [];
-        const numMoving = 20;
-
-        for (let i = 0; i < numMoving; i++) {
+        for (let i = 0; i < 20; i++) {
             const heartEl = createHeart(false);
             interactiveContainer.appendChild(heartEl);
-
-            // Give each heart distinct physics properties
             movingHearts.push({
                 el: heartEl,
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
-                vx: 0, // Velocity X
-                vy: 0, // Velocity Y
+                vx: 0, vy: 0,
                 offsetX: (Math.random() - 0.5) * 300, 
                 offsetY: (Math.random() - 0.5) * 300,
                 spring: Math.random() * 0.003 + 0.002, 
@@ -311,50 +416,34 @@
             });
         }
 
-        // Mouse Tracker
         let targetX = window.innerWidth / 2;
         let targetY = window.innerHeight / 2;
-
         document.addEventListener('mousemove', (e) => {
             targetX = e.clientX;
-            targetY = e.clientY + window.scrollY; // Account for scroll
+            targetY = e.clientY + window.scrollY; 
         });
 
         function animatePhysics() {
             movingHearts.forEach(h => {
-                // 1. Calculate where this specific heart WANTS to go
                 const time = Date.now() * 0.001;
                 const wanderX = Math.sin(time + h.offsetX) * 20;
                 const wanderY = Math.cos(time + h.offsetY) * 20;
-
                 const destX = targetX + h.offsetX + wanderX;
                 const destY = targetY + h.offsetY + wanderY;
-
-                // 2. Spring Physics
                 const ax = (destX - h.x) * h.spring;
                 const ay = (destY - h.y) * h.spring;
-
-                // 3. Update Velocity
                 h.vx += ax;
                 h.vy += ay;
-
-                // 4. Apply Friction
                 h.vx *= h.friction;
                 h.vy *= h.friction;
-
-                // 5. Update Position
                 h.x += h.vx;
                 h.y += h.vy;
-
-                // 6. Apply to DOM
                 h.el.style.transform = `translate(${h.x}px, ${h.y}px)`;
                 h.el.style.left = '0';
                 h.el.style.top = '0';
             });
-            
             requestAnimationFrame(animatePhysics);
         }
-
         animatePhysics();
 
     </script>
