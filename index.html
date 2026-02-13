@@ -301,7 +301,7 @@
         const spinBtn = document.getElementById('spin-btn');
         const resultText = document.getElementById('wheel-result');
 
-        const cuisines = ["Me...", "Pizza", "Thai", "Burgers", "Tacos", "Italian", "Chinese", "Indian"];
+        const cuisines = ["Sushi", "Pizza", "Thai", "Burgers", "Tacos", "Italian", "Chinese", "Indian"];
         const colorsWheel = ["#D32F2F", "#F48FB1", "#880E4F", "#FFCDD2", "#D32F2F", "#F48FB1", "#880E4F", "#FFCDD2"];
         
         let startAngle = 0;
@@ -310,7 +310,6 @@
         let spinArcStart = 10;
         let spinTime = 0;
         let spinTimeTotal = 0;
-        let currentRotation = 0;
 
         function drawRouletteWheel() {
             if (!ctx) return;
@@ -319,14 +318,14 @@
             ctx.lineWidth = 2;
             
             ctx.save();
-            ctx.translate(150, 150); // Move to center
+            ctx.translate(150, 150); 
             
             for(let i = 0; i < cuisines.length; i++) {
                 const angle = startAngle + i * arc;
                 ctx.fillStyle = colorsWheel[i];
                 
                 ctx.beginPath();
-                ctx.arc(0, 0, 140, angle, angle + arc, false); // 140 radius
+                ctx.arc(0, 0, 140, angle, angle + arc, false); 
                 ctx.arc(0, 0, 0, angle + arc, angle, true);
                 ctx.fill();
                 ctx.stroke();
@@ -346,7 +345,14 @@
             spinBtn.disabled = true;
             resultText.innerText = "";
             spinTime = 0;
-            spinTimeTotal = (Math.random() * 1000) + 4000; // Spin between 4 and 5 seconds
+            // RANDOMIZATION FIX:
+            // 1. Random Spin Duration (between 3.5s and 6s)
+            spinTimeTotal = (Math.random() * 2500) + 3500; 
+            
+            // 2. Random Initial Speed (between 20 and 40 degrees per frame)
+            // This drastically changes total distance traveled
+            spinArcStart = (Math.random() * 20) + 20; 
+            
             rotateWheel();
         }
 
@@ -357,7 +363,6 @@
                 return;
             }
             
-            // Ease out logic
             const spinAngle = spinArcStart - easeOut(spinTime, 0, spinArcStart, spinTimeTotal);
             startAngle += (spinAngle * Math.PI / 180);
             drawRouletteWheel();
@@ -371,7 +376,6 @@
             const index = Math.floor((360 - degrees % 360) / arcd);
             ctx.save();
             
-            // Show result
             resultText.innerText = "Let's eat: " + cuisines[index] + "!";
             drawRouletteWheel();
         }
@@ -382,7 +386,6 @@
             return b+c*(tc + -3*ts + 3*t);
         }
 
-        // Initialize Wheel
         drawRouletteWheel();
 
         /* --- HEART BACKGROUND SCRIPT --- */
