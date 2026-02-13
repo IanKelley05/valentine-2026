@@ -103,9 +103,9 @@
                     <div class="flex-1 text-left">
                         <div class="text-5xl mb-6">🍔 🍣 🍕</div>
                         <h3 class="font-serif text-3xl text-gray-800 mb-4">Tonight, distance doesn't matter.</h3>
+                        
                         <p class="text-lg text-gray-700 mb-6 leading-relaxed">
-                            We are ordering for each other! <br>
-                            Pick something savory, something sweet, and something surprising.
+                            We are ordering for each other! Pick something savory, something sweet, and something surprising.
                         </p>
                         
                         <div class="bg-white/60 p-4 rounded-xl border border-pink-100 mb-8 inline-block">
@@ -148,7 +148,8 @@
 
     <section id="map-challenge" class="py-20 px-4 bg-cream border-t border-pink-100 relative z-20">
         <div class="max-w-5xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-12 items-start mb-12">
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-12">
                 
                 <div>
                     <h2 class="font-serif text-4xl text-deep-rose mb-6">Part II: The NYC Map-Off</h2>
@@ -169,7 +170,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-2xl p-8 text-center border border-gray-100 sticky top-10">
+                <div class="bg-white rounded-2xl shadow-2xl p-8 text-center border border-gray-100">
                     <div class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-2">Time Remaining</div>
                     <div id="timer-display" class="font-serif text-6xl md:text-7xl font-bold text-gray-800 mb-8 tabular-nums">
                         15:00
@@ -301,7 +302,7 @@
         const spinBtn = document.getElementById('spin-btn');
         const resultText = document.getElementById('wheel-result');
 
-        const cuisines = ["Sushi", "Pizza", "Thai", "Burgers", "Tacos", "Italian", "Chinese", "Indian"];
+        const cuisines = ["Me...", "Pizza", "Thai", "Burgers", "Tacos", "Italian", "Chinese", "Indian"];
         const colorsWheel = ["#D32F2F", "#F48FB1", "#880E4F", "#FFCDD2", "#D32F2F", "#F48FB1", "#880E4F", "#FFCDD2"];
         
         let startAngle = 0;
@@ -345,12 +346,10 @@
             spinBtn.disabled = true;
             resultText.innerText = "";
             spinTime = 0;
-            // RANDOMIZATION FIX:
-            // 1. Random Spin Duration (between 3.5s and 6s)
+            // Random Spin Duration (between 3.5s and 6s)
             spinTimeTotal = (Math.random() * 2500) + 3500; 
             
-            // 2. Random Initial Speed (between 20 and 40 degrees per frame)
-            // This drastically changes total distance traveled
+            // Random Initial Speed (between 20 and 40 degrees per frame)
             spinArcStart = (Math.random() * 20) + 20; 
             
             rotateWheel();
