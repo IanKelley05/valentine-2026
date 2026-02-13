@@ -25,27 +25,24 @@
         }
     </script>
     <style>
-        /* Animations */
+        /* --- Animations --- */
+        
+        /* Floating for title & static hearts */
         @keyframes float-up-down {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
         }
-        .animate-float-static {
-            animation: float-up-down 6s ease-in-out infinite;
-        }
+        .animate-float-static { animation: float-up-down 6s ease-in-out infinite; }
         
         @keyframes float-title {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
-        .animate-float {
-            animation: float-title 3s ease-in-out infinite;
-        }
+        .animate-float { animation: float-title 3s ease-in-out infinite; }
         
-        .btn-hover {
-            transition: all 0.3s ease;
-        }
+        /* Button Hover */
+        .btn-hover { transition: all 0.3s ease; }
         .btn-hover:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -63,23 +60,55 @@
             top: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 0; 
-            height: 0; 
+            width: 0; height: 0; 
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
             border-top: 30px solid #D32F2F;
             z-index: 10;
             filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.3));
         }
+
+        /* --- NEW: Swimming Hearts Background Animation --- */
+        @keyframes swim-across {
+            0% {
+                transform: translate3d(-10vw, 0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: var(--heart-opacity); }
+            25% { transform: translate3d(20vw, 15px, 0) rotate(5deg); }
+            50% { transform: translate3d(50vw, 0, 0) rotate(0deg); }
+            75% { transform: translate3d(80vw, -15px, 0) rotate(-5deg); }
+            90% { opacity: var(--heart-opacity); }
+            100% {
+                transform: translate3d(110vw, 0, 0) rotate(0deg);
+                opacity: 0;
+            }
+        }
+
+        .swimming-heart {
+            position: absolute;
+            top: var(--heart-top);
+            left: 0;
+            font-size: var(--heart-size);
+            color: var(--heart-color);
+            /* opacity is handled in keyframes for fade in/out */
+            pointer-events: none;
+            user-select: none;
+            animation: swim-across var(--swim-duration) linear infinite;
+            animation-delay: var(--swim-delay);
+            will-change: transform; /* Performance optimization */
+        }
     </style>
 </head>
-<body class="bg-cream text-gray-800 font-sans antialiased">
+<body class="bg-cream text-gray-800 font-sans antialiased relative">
+    
+    <div id="heart-background-container" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
 
-    <header class="min-h-screen flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-soft-pink to-cream relative overflow-hidden">
+    <header class="min-h-screen flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-soft-pink/80 to-cream/80 relative z-10 overflow-hidden">
         <div id="static-hearts" class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0"></div>
         <div id="interactive-hearts" class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0"></div>
 
-        <div class="relative z-10 bg-white/40 backdrop-blur-md p-10 rounded-3xl border-4 border-double border-white/80 shadow-xl">
+        <div class="relative z-10 bg-white/50 backdrop-blur-md p-10 rounded-3xl border-4 border-double border-white/80 shadow-xl">
             <h1 class="font-serif text-5xl md:text-7xl font-bold text-deep-rose mb-6 animate-float">
                 Mian Valentine’s Day 2026
             </h1>
@@ -93,11 +122,11 @@
         </div>
     </header>
 
-    <section id="dinner" class="py-20 px-4 bg-white relative z-20">
+    <section id="dinner" class="py-20 px-4 bg-white/90 relative z-10">
         <div class="max-w-5xl mx-auto text-center">
             <h2 class="font-serif text-4xl text-deep-rose mb-8">Part I: The DoorDash Feast</h2>
             
-            <div class="bg-soft-pink rounded-3xl p-8 md:p-12 shadow-xl border border-pink-200">
+            <div class="bg-soft-pink/90 rounded-3xl p-8 md:p-12 shadow-xl border border-pink-200">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-12">
                     
                     <div class="flex-1 text-left">
@@ -108,7 +137,7 @@
                             We are ordering for each other! Pick something savory, something sweet, and something surprising.
                         </p>
                         
-                        <div class="bg-white/60 p-4 rounded-xl border border-pink-100 mb-8 inline-block">
+                        <div class="bg-white/70 p-4 rounded-xl border border-pink-100 mb-8 inline-block">
                             <p class="text-sm uppercase tracking-widest text-gray-500 mb-1">Budget</p>
                             <p class="text-xl md:text-2xl font-black text-love-red leading-tight">
                                 NONE! LETS FEAST TONIGHT <br> WE DESERVE IT!! 🥂
@@ -146,7 +175,7 @@
         </div>
     </section>
 
-    <section id="map-challenge" class="py-20 px-4 bg-cream border-t border-pink-100 relative z-20">
+    <section id="map-challenge" class="py-20 px-4 bg-cream/90 border-t border-pink-100 relative z-10">
         <div class="max-w-5xl mx-auto">
             
             <div class="grid md:grid-cols-2 gap-12 items-center mb-12">
@@ -158,7 +187,7 @@
                         Who can find the best hidden gem?
                     </p>
                     
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-love-red mb-8">
+                    <div class="bg-white/80 p-6 rounded-xl shadow-sm border-l-4 border-love-red mb-8">
                         <h3 class="font-bold text-xl mb-4 text-gray-800">The 5-Pin Rules:</h3>
                         <ul class="space-y-3 text-gray-600">
                             <li class="flex items-center"><span class="text-love-red mr-2">✓</span> Drop exactly <strong>5 Pins</strong> each.</li>
@@ -170,7 +199,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-2xl p-8 text-center border border-gray-100">
+                <div class="bg-white/80 rounded-2xl shadow-2xl p-8 text-center border border-gray-100">
                     <div class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-2">Time Remaining</div>
                     <div id="timer-display" class="font-serif text-6xl md:text-7xl font-bold text-gray-800 mb-8 tabular-nums">
                         15:00
@@ -189,7 +218,7 @@
                 </div>
             </div>
 
-            <div class="w-full bg-white p-2 rounded-2xl shadow-xl border border-pink-200">
+            <div class="w-full bg-white/80 p-2 rounded-2xl shadow-xl border border-pink-200">
                 <iframe 
                     src="https://www.google.com/maps/d/embed?mid=1_2aAWbw4qDsupPV_8ygW6pl2NgfEO2U&ehbc=2E312F" 
                     class="w-full h-96 md:h-[500px] rounded-xl"
@@ -206,7 +235,7 @@
         </div>
     </section>
 
-    <section id="coloring" class="py-20 px-4 bg-gradient-to-t from-soft-pink to-white relative z-20">
+    <section id="coloring" class="py-20 px-4 bg-gradient-to-t from-soft-pink/80 to-white/80 relative z-10">
         <div class="max-w-6xl mx-auto text-center">
             <h2 class="font-serif text-4xl text-deep-rose mb-6">Part III: The Masterpiece</h2>
             <p class="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
@@ -214,36 +243,40 @@
                 Pick your favorite, download it (or open on iPad), and let's color together.
             </p>
             
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
-                    <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
+            <div class="grid md:grid-cols-3 gap-8 items-stretch">
+                
+                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col justify-between h-full">
+                    <div class="w-full flex-grow bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100 flex items-center justify-center">
                         <img src="page-1.png" alt="Coloring Page 1" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
                     </div>
-                    <a href="page-1.png" download="Mian-Coloring-Landscape-1.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
+                    <a href="page-1.png" download="Mian-Coloring-Landscape-1.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover text-center">
                         Download #1
                     </a>
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center transform md:-translate-y-4">
-                    <div class="h-80 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
+
+                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col justify-between h-full transform md:-translate-y-4">
+                    <div class="w-full flex-grow bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100 flex items-center justify-center">
                         <img src="page-2.png" alt="Coloring Page 2" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
                     </div>
-                    <a href="page-2.png" download="Mian-Coloring-Portrait.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
+                    <a href="page-2.png" download="Mian-Coloring-Portrait.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover text-center">
                         Download #2
                     </a>
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
-                    <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
+
+                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col justify-between h-full">
+                    <div class="w-full flex-grow bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100 flex items-center justify-center">
                         <img src="page-3.png" alt="Coloring Page 3" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
                     </div>
-                    <a href="page-3.png" download="Mian-Coloring-Landscape-2.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
+                    <a href="page-3.png" download="Mian-Coloring-Landscape-2.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover text-center">
                         Download #3
                     </a>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <footer class="bg-deep-rose text-pink-100 py-10 text-center relative z-20">
+    <footer class="bg-deep-rose text-pink-100 py-10 text-center relative z-10">
         <p class="font-serif italic text-xl">Can't wait to see you in NYC.</p>
         <p class="text-sm mt-4 opacity-75">Love, Ian</p>
     </footer>
@@ -387,7 +420,7 @@
 
         drawRouletteWheel();
 
-        /* --- HEART BACKGROUND SCRIPT --- */
+        /* --- HERO SECTION HEARTS SCRIPT --- */
         const heartColors = ['text-love-red', 'text-pink-400', 'text-deep-rose', 'text-pink-300'];
         
         function createHeart(isStatic) {
@@ -401,7 +434,7 @@
             return heart;
         }
 
-        // Static Hearts
+        // Static Hearts in Hero
         const staticContainer = document.getElementById('static-hearts');
         for (let i = 0; i < 50; i++) {
             const heart = createHeart(true);
@@ -413,7 +446,7 @@
             staticContainer.appendChild(heart);
         }
 
-        // Interactive Hearts
+        // Interactive Hearts in Hero
         const interactiveContainer = document.getElementById('interactive-hearts');
         const movingHearts = [];
         for (let i = 0; i < 20; i++) {
@@ -460,6 +493,37 @@
             requestAnimationFrame(animatePhysics);
         }
         animatePhysics();
+
+        /* --- NEW: FULL PAGE SWIMMING HEARTS SCRIPT --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('heart-background-container');
+            const colors = ['#D32F2F', '#F48FB1', '#880E4F', '#FFCDD2'];
+            const numHearts = 35; // Number of swimming hearts
+
+            for (let i = 0; i < numHearts; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '♥';
+                heart.classList.add('swimming-heart');
+
+                // Random properties for natural look
+                const top = Math.random() * 100; // Random vertical position
+                const size = Math.random() * 20 + 10; // Random size
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const opacity = Math.random() * 0.4 + 0.1; // Random opacity
+                const duration = Math.random() * 25 + 20; // Slow movement (20-45s)
+                const delay = Math.random() * -45; // Start at random points in animation cycle
+
+                // Set CSS variables
+                heart.style.setProperty('--heart-top', `${top}vh`);
+                heart.style.setProperty('--heart-size', `${size}px`);
+                heart.style.setProperty('--heart-color', color);
+                heart.style.setProperty('--heart-opacity', opacity);
+                heart.style.setProperty('--swim-duration', `${duration}s`);
+                heart.style.setProperty('--swim-delay', `${delay}s`);
+
+                container.appendChild(heart);
+            }
+        });
 
     </script>
 </body>
