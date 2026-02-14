@@ -68,7 +68,7 @@
             filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.3));
         }
 
-        /* --- NEW: Swimming Hearts Background Animation --- */
+        /* --- Swimming Hearts Background Animation --- */
         @keyframes swim-across {
             0% {
                 transform: translate3d(-10vw, 0, 0) rotate(0deg);
@@ -91,12 +91,11 @@
             left: 0;
             font-size: var(--heart-size);
             color: var(--heart-color);
-            /* opacity is handled in keyframes for fade in/out */
             pointer-events: none;
             user-select: none;
             animation: swim-across var(--swim-duration) linear infinite;
             animation-delay: var(--swim-delay);
-            will-change: transform; /* Performance optimization */
+            will-change: transform; 
         }
     </style>
 </head>
@@ -243,35 +242,31 @@
                 Pick your favorite, download it (or open on iPad), and let's color together.
             </p>
             
-            <div class="grid md:grid-cols-3 gap-8 items-stretch">
-                
-                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col justify-between h-full">
-                    <div class="w-full flex-grow bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100 flex items-center justify-center">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
+                    <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
                         <img src="page-1.png" alt="Coloring Page 1" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
                     </div>
-                    <a href="page-1.png" download="Mian-Coloring-Landscape-1.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover text-center">
+                    <a href="page-1.png" download="Mian-Coloring-Landscape-1.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
                         Download #1
                     </a>
                 </div>
-
-                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col justify-between h-full transform md:-translate-y-4">
-                    <div class="w-full flex-grow bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100 flex items-center justify-center">
+                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center transform md:-translate-y-4">
+                    <div class="h-80 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
                         <img src="page-2.png" alt="Coloring Page 2" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
                     </div>
-                    <a href="page-2.png" download="Mian-Coloring-Portrait.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover text-center">
+                    <a href="page-2.png" download="Mian-Coloring-Portrait.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
                         Download #2
                     </a>
                 </div>
-
-                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col justify-between h-full">
-                    <div class="w-full flex-grow bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100 flex items-center justify-center">
+                <div class="bg-white/90 p-4 rounded-xl shadow-lg border border-pink-100 flex flex-col items-center">
+                    <div class="h-64 w-full bg-white rounded-lg mb-4 overflow-hidden relative group border border-gray-100">
                         <img src="page-3.png" alt="Coloring Page 3" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
                     </div>
-                    <a href="page-3.png" download="Mian-Coloring-Landscape-2.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover text-center">
+                    <a href="page-3.png" download="Mian-Coloring-Landscape-2.png" class="w-full bg-deep-rose text-white py-3 rounded-lg font-bold btn-hover">
                         Download #3
                     </a>
                 </div>
-
             </div>
         </div>
     </section>
@@ -494,7 +489,7 @@
         }
         animatePhysics();
 
-        /* --- NEW: FULL PAGE SWIMMING HEARTS SCRIPT --- */
+        /* --- FULL PAGE SWIMMING HEARTS SCRIPT --- */
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('heart-background-container');
             const colors = ['#D32F2F', '#F48FB1', '#880E4F', '#FFCDD2'];
